@@ -1,3 +1,3 @@
 # fullstackopen-part5
 
-timer:
+timer: 0min

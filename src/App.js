@@ -3,6 +3,25 @@ import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login' 
 
+
+const Notification = ({ message, isError }) => {
+  if (message === null) {
+    return null
+  }
+  else if (message !== null && isError === null){
+    return (
+      <div className="notification">
+        {message}
+      </div>
+    )
+  }
+  return (
+    <div className="error">
+      {message}
+    </div>
+  )
+}
+
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('') 
@@ -11,6 +30,8 @@ const App = () => {
   const [newTitle, setNewTitle] = useState('') 
   const [newAuthor, setNewAuthor] = useState('') 
   const [newUrl, setNewUrl] = useState('') 
+  const [errorMessage, setErrorMessage] = useState(null)
+  const [isError, setIsError] = useState(null)
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -31,17 +52,23 @@ const App = () => {
     event.preventDefault()
     const blogObject = {
       title: newTitle,
-      author: newAuthor,
+      author: user.name,
       url: newUrl,
     }
 
     blogService
       .create(blogObject)
       .then(returnedBlog => {
+        console.log(returnedBlog)
+        console.log(returnedBlog.author.name)
         setBlogs(blogs.concat(returnedBlog))
         setNewTitle('')
         setNewAuthor('')
         setNewUrl('')
+        setErrorMessage(`a new blog ${returnedBlog.title} by ${blogs.at(-1).author.name} added`)
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
       })
     
   }
@@ -66,6 +93,10 @@ const App = () => {
     setUser(null)
     setUsername('')
     setPassword('')
+    setErrorMessage("Logged out")
+    setTimeout(() => {
+      setErrorMessage(null)
+    }, 5000)
     window.localStorage.removeItem('loggedNoteappUser')
   }
   
@@ -87,6 +118,12 @@ const App = () => {
       setPassword('')
     } catch{
       console.log('Wrong credentials')
+      setErrorMessage('Wrong credentials')
+      setIsError(true)
+      setTimeout(() => {
+        setErrorMessage(null)
+        setIsError(null)
+      }, 5000)
     }
     
     /* catch (exception) {
@@ -155,6 +192,7 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
+      <Notification message={errorMessage} isError={isError} />
       {user === null ?
       loginForm() :
       <div>

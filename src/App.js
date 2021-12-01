@@ -64,6 +64,25 @@ const App = () => {
     
   }
 
+  const addLike = id => {
+    const blog = blogs.find(b => b.id === id)
+    const changedBlog = {...blog, likes: blog.likes+1}
+    blogService
+      .update(id, changedBlog)
+      .then(returnedBlog => {
+        setBlogs(blogs.map(blog => blog.id !== id ? blog : returnedBlog))
+      })
+      .catch( () => {
+        setErrorMessage(
+          `Blog '${blog.title}' was already removed from server`
+        )
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
+        setBlogs(blogs.filter(n => n.id !== id))
+      })
+  }
+
   const handleLogout = (event) => {
     event.preventDefault()
     setUser(null)
@@ -150,7 +169,7 @@ const App = () => {
       </div>
       }
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} addlike={() => addLike(blog.id)} />
       )}
     </div>
   )

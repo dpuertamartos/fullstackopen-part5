@@ -26,7 +26,7 @@ const Blog = (props) => {
       <div style={showWhenVisible}>
         {props.blog.title} <button onClick={toggleVisibility}>hide</button>
         <div>{props.blog.url}</div>
-        <div>Likes: {props.blog.likes} <button onClick="">Like</button></div>
+        <div>Likes: {props.blog.likes} <button onClick={props.addlike}>Like</button></div>
         <div>Posted by: {props.blog.author.name}</div>
         
       </div>

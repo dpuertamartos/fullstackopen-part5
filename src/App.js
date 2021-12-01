@@ -61,16 +61,20 @@ const App = () => {
           setErrorMessage(null)
         }, 5000)
       })
-    
+    blogService.getAll().then(blogs =>
+      setBlogs( blogs )
+    ) 
   }
 
-  const addLike = id => {
+  const addLike = (id) => {
     const blog = blogs.find(b => b.id === id)
     const changedBlog = {...blog, likes: blog.likes+1}
-    blogService
-      .update(id, changedBlog)
+    
+    blogService.update(id, changedBlog)
       .then(returnedBlog => {
-        setBlogs(blogs.map(blog => blog.id !== id ? blog : returnedBlog))
+        console.log(JSON.stringify(returnedBlog))
+        console.log(JSON.stringify(changedBlog))
+        setBlogs(blogs.map(blog => blog.id !== id ? blog : changedBlog))
       })
       .catch( () => {
         setErrorMessage(
@@ -152,6 +156,15 @@ const App = () => {
     )
   }
   
+  function compare(a,b) {
+    if (a.likes > b.likes) return -1;
+    if (b.likes > a.likes) return 1;
+
+    return 0;
+  }
+
+  const sortedBlogs = blogs.sort(compare)
+
   const blogForm = () => (
     <Togglable buttonLabel='New Blog' ref={blogFormRef}>
       <BlogForm createBlog={addBlog} user={user.name}/>
@@ -168,7 +181,7 @@ const App = () => {
         {blogForm()}
       </div>
       }
-      {blogs.map(blog =>
+      {sortedBlogs.map(blog =>
         <Blog key={blog.id} blog={blog} addlike={() => addLike(blog.id)} />
       )}
     </div>

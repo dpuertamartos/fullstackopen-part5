@@ -66,6 +66,22 @@ const App = () => {
     ) 
   }
 
+  const delBlog = (id) => {
+    blogService.del(id)
+      .then(()=>{
+        blogService.getAll().then(blogs =>
+          setBlogs(blogs))
+        })
+      .catch((error)=>{
+        setErrorMessage(
+          `${error}`
+        )
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
+      })
+  }
+
   const addLike = (id) => {
     const blog = blogs.find(b => b.id === id)
     const changedBlog = {...blog, likes: blog.likes+1}
@@ -182,7 +198,7 @@ const App = () => {
       </div>
       }
       {sortedBlogs.map(blog =>
-        <Blog key={blog.id} blog={blog} addlike={() => addLike(blog.id)} />
+        <Blog key={blog.id} blog={blog} addlike={() => addLike(blog.id)} delBlog={() => delBlog(blog.id)} />
       )}
     </div>
   )

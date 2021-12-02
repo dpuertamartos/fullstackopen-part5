@@ -28,6 +28,7 @@ const Blog = (props) => {
         <div>{props.blog.url}</div>
         <div>Likes: {props.blog.likes} <button onClick={props.addlike}>Like</button></div>
         <div>Posted by: {props.blog.author.name}</div>
+        <div><button onClick={props.delBlog}>Remove</button></div>
         
       </div>
     </div>

@@ -28,8 +28,10 @@ const Blog = (props) => {
         <div>{props.blog.url}</div>
         <div>Likes: {props.blog.likes} <button onClick={props.addlike}>Like</button></div>
         <div>Posted by: {props.blog.author.name}</div>
-        <div><button onClick={props.delBlog}>Remove</button></div>
-        
+        {props.user.username === props.blog.author.username
+        ? <div><button onClick={props.delBlog}>Remove</button></div>
+        : <span></span>
+        }
       </div>
     </div>
   )

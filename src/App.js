@@ -67,7 +67,8 @@ const App = () => {
   }
 
   const delBlog = (id) => {
-    blogService.del(id)
+    if (window.confirm("do you want to delete it?")){
+      blogService.del(id)
       .then(()=>{
         blogService.getAll().then(blogs =>
           setBlogs(blogs))
@@ -80,6 +81,7 @@ const App = () => {
           setErrorMessage(null)
         }, 5000)
       })
+    }
   }
 
   const addLike = (id) => {
@@ -198,7 +200,7 @@ const App = () => {
       </div>
       }
       {sortedBlogs.map(blog =>
-        <Blog key={blog.id} blog={blog} addlike={() => addLike(blog.id)} delBlog={() => delBlog(blog.id)} />
+        <Blog key={blog.id} blog={blog} addlike={() => addLike(blog.id)} delBlog={() => delBlog(blog.id)} user={user} />
       )}
     </div>
   )

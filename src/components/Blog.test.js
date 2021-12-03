@@ -11,11 +11,12 @@ describe('Togglable blog content', () => {
         likes: 0
       }
     
+    const mockHandler = jest.fn()
     let component
 
     beforeEach(() => {
         component = component = render(
-            <Blog blog={blog} user={blog.author}/>
+            <Blog blog={blog} user={blog.author} addlike={mockHandler}/>
           )
     })
 
@@ -36,6 +37,13 @@ describe('Togglable blog content', () => {
         expect(
           component.container.querySelector('.showClick')
         ).not.toHaveStyle('display: none')  
+    })
+
+    test('When like is clicked 2 times controller get called 2 times', () => {     
+        const likeButton = component.getByText('Like')
+        fireEvent.click(likeButton)
+        fireEvent.click(likeButton)
+        expect(mockHandler.mock.calls).toHaveLength(2) 
     })
 })
 

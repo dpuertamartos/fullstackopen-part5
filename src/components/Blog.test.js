@@ -15,7 +15,7 @@ describe('Togglable blog content', () => {
     let component
 
     beforeEach(() => {
-        component = component = render(
+        component = render(
             <Blog blog={blog} user={blog.author} addlike={mockHandler}/>
           )
     })

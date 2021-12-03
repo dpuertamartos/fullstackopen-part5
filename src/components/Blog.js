@@ -20,12 +20,12 @@ const Blog = (props) => {
 
   return(
     <div style={blogStyle}>
-      <div style={hideWhenVisible}>
+      <div style={hideWhenVisible} className="showAlways">
         {props.blog.title} <button onClick={toggleVisibility}>view</button>
       </div>
-      <div style={showWhenVisible}>
+      <div style={showWhenVisible} className="showClick">
         {props.blog.title} <button onClick={toggleVisibility}>hide</button>
-        <div>{props.blog.url}</div>
+        <div className="url">{props.blog.url}</div>
         <div>Likes: {props.blog.likes} <button onClick={props.addlike}>Like</button></div>
         <div>Posted by: {props.blog.author.name}</div>
         {props.user.username === props.blog.author.username

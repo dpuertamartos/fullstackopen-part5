@@ -1,4 +1,12 @@
 describe('Blog app', function() {
+    function compare(a,b) {
+      if (a.likes > b.likes) return -1;
+      if (b.likes > a.likes) return 1;
+
+      return 0;
+    }
+    
+    
     beforeEach(function() {
       cy.request('POST', 'http://localhost:3001/api/testing/reset')
       const user = {
@@ -75,9 +83,21 @@ describe('Blog app', function() {
               cy.contains('Remove').click()
               cy.get('html').should('not.contain', 'New title')  
               
-            }) 
+            })
+            it.only('Blogs are ordered by likes', function() {
+              cy.contains('New Blog').click()
+              cy.get('#title').type('New title2')
+              cy.get('#author').type('New author2')
+              cy.get('#url').type('New url2')  
+              cy.contains('create').click()
+              cy.contains('New title2').parent().find("button").click()
+              cy.contains('New author2').parent().contains("Like").click()
+              cy.get('.blog', { timeout: 1000 }).then((blogs)=>console.log(blogs.sort(compare)))
+              
+            })
         })
-        
+
+       
       })
   })
 

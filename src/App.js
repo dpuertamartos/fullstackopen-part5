@@ -56,7 +56,7 @@ const App = () => {
       .create(blogObject)
       .then(returnedBlog => {
         setBlogs(blogs.concat(returnedBlog))
-        setErrorMessage(`a new blog ${returnedBlog.title} added`)
+        setErrorMessage(`a new blog added`)
         setTimeout(() => {
           setErrorMessage(null)
         }, 5000)

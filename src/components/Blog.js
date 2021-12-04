@@ -22,20 +22,23 @@ const Blog = (props) => {
 
   return(
     <div style={blogStyle}>
-      <div style={hideWhenVisible} className="showAlways">
-        {props.blog.title} <button onClick={toggleVisibility}>view</button>
+      <div className="blog">
+        <div style={hideWhenVisible} className="showAlways">
+          <span id={props.blog.title}>{props.blog.title} <button onClick={toggleVisibility}>view</button></span>
+        </div> 
+        <div style={showWhenVisible} className="showClick">
+          {props.blog.title} <button onClick={toggleVisibility}>hide</button>
+          <div className="url">{props.blog.url}</div>
+          <div>Likes: {props.blog.likes} <button onClick={props.addlike}>Like</button></div>
+          <div>Posted by: {props.blog.writer}</div>
+          {props.user !== null && props.user.username === props.blog.author.username
+          ? <button onClick={props.delblog}>Remove</button>
+          : <span></span>
+          }
+        </div>
       </div>
-      <div style={showWhenVisible} className="showClick">
-        {props.blog.title} <button onClick={toggleVisibility}>hide</button>
-        <div className="url">{props.blog.url}</div>
-        <div>Likes: {props.blog.likes} <button onClick={props.addlike}>Like</button></div>
-        <div>Posted by: {props.blog.writer}</div>
-        {props.user !== null && props.user.username === props.blog.author.username
-        ? <button onClick={props.delblog}>Remove</button>
-        : <span></span>
-        }
       </div>
-    </div>
+      
   )
 } 
 

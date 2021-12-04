@@ -56,7 +56,7 @@ const App = () => {
       .create(blogObject)
       .then(returnedBlog => {
         setBlogs(blogs.concat(returnedBlog))
-        setErrorMessage(`a new blog ${returnedBlog.title} by ${blogs.at(-1).author.name} added`)
+        setErrorMessage(`a new blog ${returnedBlog.title} added`)
         setTimeout(() => {
           setErrorMessage(null)
         }, 5000)
@@ -70,8 +70,11 @@ const App = () => {
     if (window.confirm("do you want to delete it?")){
       blogService.del(id)
       .then(()=>{
-        blogService.getAll().then(blogs =>
-          setBlogs(blogs))
+        blogService.getAll().then(blogs =>{
+          console.log('blog deleted')
+          setBlogs(blogs) 
+          })
+
         })
       .catch((error)=>{
         setErrorMessage(
@@ -200,7 +203,7 @@ const App = () => {
       </div>
       }
       {sortedBlogs.map(blog =>
-        <Blog key={blog.id} blog={blog} addlike={() => addLike(blog.id)} delBlog={() => delBlog(blog.id)} user={user} />
+        <Blog key={blog.id} blog={blog} addlike={() => addLike(blog.id)} delblog={() => delBlog(blog.id)} user={user} />
       )}
     </div>
   )

@@ -14,6 +14,8 @@ const Blog = (props) => {
   const hideWhenVisible = { display: visible ? 'none' : '' }
   const showWhenVisible = { display: visible ? '' : 'none' }
 
+  
+  
   const toggleVisibility = () => {
     setVisible(!visible)
   }
@@ -27,9 +29,9 @@ const Blog = (props) => {
         {props.blog.title} <button onClick={toggleVisibility}>hide</button>
         <div className="url">{props.blog.url}</div>
         <div>Likes: {props.blog.likes} <button onClick={props.addlike}>Like</button></div>
-        <div>Posted by: {props.blog.author}</div>
-        {props.user === props.blog.author
-        ? <div><button onClick={props.delBlog}>Remove</button></div>
+        <div>Posted by: {props.blog.writer}</div>
+        {props.user !== null && props.user.username === props.blog.author.username
+        ? <button onClick={props.delblog}>Remove</button>
         : <span></span>
         }
       </div>

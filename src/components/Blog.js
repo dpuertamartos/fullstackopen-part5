@@ -27,8 +27,8 @@ const Blog = (props) => {
         {props.blog.title} <button onClick={toggleVisibility}>hide</button>
         <div className="url">{props.blog.url}</div>
         <div>Likes: {props.blog.likes} <button onClick={props.addlike}>Like</button></div>
-        <div>Posted by: {props.blog.author.name}</div>
-        {props.user.username === props.blog.author.username
+        <div>Posted by: {props.blog.author}</div>
+        {props.user === props.blog.author
         ? <div><button onClick={props.delBlog}>Remove</button></div>
         : <span></span>
         }

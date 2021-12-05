@@ -84,18 +84,61 @@ describe('Blog app', function() {
               cy.get('html').should('not.contain', 'New title')  
               
             })
-            it.only('Blogs are ordered by likes', function() {
-              cy.contains('New Blog').click()
-              cy.get('#title').type('New title2')
-              cy.get('#author').type('New author2')
-              cy.get('#url').type('New url2')  
-              cy.contains('create').click()
-              cy.contains('New title2').parent().find("button").click()
-              cy.contains('New author2').parent().contains("Like").click()
-              cy.get('.blog', { timeout: 1000 }).then((blogs)=>console.log(blogs.sort(compare)))
-              
-            })
         })
+
+        describe('When several blogs creaded by many people exist', function() {
+          beforeEach(function() {
+            cy.login({ username: 'mluukkai', password: 'mluukkai' })
+            cy.contains('New Blog').click()
+            cy.get('#title').type('test1')
+            cy.get('#author').type('New author')
+            cy.get('#url').type('New url')
+            cy.contains('create').click()
+            cy.contains('New Blog').click()
+            cy.get('#title').type('test2')
+            cy.get('#author').type('New author')
+            cy.get('#url').type('New url')
+            cy.contains('create').click()
+            cy.contains('New Blog').click()
+            cy.get('#title').type('test3')
+            cy.get('#author').type('New author')
+            cy.get('#url').type('New url')
+            cy.contains('create').click()
+      
+            cy.contains('test1').parent().parent().as('blog1')
+            cy.contains('test2').parent().parent().as('blog2')
+            cy.contains('test3').parent().parent().as('blog3')
+          })
+      
+          it('Blogs can be liked', function() {
+            cy.get('@blog2').contains('view').click()
+            cy.get('@blog2').contains('Like').click()
+            cy.get('@blog2').contains('Likes: 1')
+          })
+      
+          it('they are ordered by number of likes', function() {
+            cy.get('@blog1').contains('view').click()
+            cy.get('@blog2').contains('view').click()
+            cy.get('@blog3').contains('view').click()
+            cy.get('@blog1').contains('Like').as('like1')
+            cy.get('@blog2').contains('Like').as('like2')
+            cy.get('@blog3').contains('Like').as('like3')
+      
+            cy.get('@like2').click()
+            cy.get('@like1').click()
+            cy.get('@like1').click()
+            cy.get('@like3').click()
+            cy.get('@like3').click()
+            cy.get('@like3').click()
+      
+            cy.get('.blog').then(blogs => {
+              cy.wrap(blogs[0]).contains('Likes: 3')
+              cy.wrap(blogs[1]).contains('Likes: 2')
+              cy.wrap(blogs[2]).contains('Likes: 1')
+            })
+          })
+        })  
+        
 
        
       })

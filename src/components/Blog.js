@@ -21,8 +21,8 @@ const Blog = (props) => {
   }
 
   return(
-    <div style={blogStyle}>
-      <div className="blog">
+    <div style={blogStyle} className='blog'>
+      
         <div style={hideWhenVisible} className="showAlways">
           <span id={props.blog.title}>{props.blog.title} <button onClick={toggleVisibility}>view</button></span>
         </div> 
@@ -36,7 +36,7 @@ const Blog = (props) => {
           : <span></span>
           }
         </div>
-      </div>
+      
       </div>
       
   )

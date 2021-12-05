@@ -36,7 +36,7 @@ Cypress.Commands.add('createBlog', ({ content, important }) => {
     cy.request({
         url: 'http://localhost:3001/api/blogs',
         method: 'POST',
-        body: { content, important },
+        body: { writer, title, url },
         headers: {
         'Authorization': `bearer ${JSON.parse(localStorage.getItem('loggedNoteappUser')).token}`
         }

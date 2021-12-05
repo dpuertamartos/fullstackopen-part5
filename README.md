@@ -5,5 +5,4 @@
 5.9 15min
 5.10-5.12 37min
 5.13-5.16 52min
-2H
-1H 45MIN
+5.17-5.21 3h 45min 5.22 not able to finish

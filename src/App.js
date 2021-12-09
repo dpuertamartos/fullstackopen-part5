@@ -3,13 +3,12 @@ import Blog from './components/Blog'
 import LoginForm from './components/Loginform'
 import BlogForm from './components/Blogform'
 import Togglable from './components/Togglable'
-import Notification from './components/Notification'
-import blogService from './services/blogs'
-import loginService from './services/login' 
+import Notification from './components/Notification' 
 import { ChangeThenRemoveNotification } from './reducers/notificationReducer'
 import { useSelector, useDispatch } from 'react-redux'
 import { addLikeOf, createBlog, deleteBlog, initializeBlogs } from './reducers/blogReducer'
 import { logUser, setUser } from './reducers/userReducer'
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom"
 
 
 const App = () => {
@@ -109,21 +108,41 @@ const App = () => {
       <BlogForm createBlog={addBlog} user={user.name}/>
     </Togglable>)
 
+  const padding = {
+    padding: 5
+  }  
+
   return (
-    <div>
-      <h2>blogs</h2>
-      <Notification isError={isError} />
-      {user.logged === null ?
-      loginForm() :
-      <div>
-        <p>{user.logged.name} logged-in <button onClick={handleLogout}>Logout</button></p>
-        {blogForm()}
+    <Router>
+      <div className="header">
+        <h2>blogs</h2>
+              <Notification isError={isError} />
+              {user.logged === null ?
+              loginForm() :
+              <div>
+                <p>{user.logged.name} logged-in <button onClick={handleLogout}>Logout</button></p>
+                {blogForm()}
+              </div>
+              }
       </div>
-      }
-      {sortedBlogs.map(blog =>
-        <Blog key={blog.id} blog={blog} addlike={() => addLike(blog.id)} delblog={() => delBlog(blog.id)} user={user} />
-      )}
-    </div>
+      <div className="menu">
+        <Link style={padding} to="/">home</Link>
+        <Link style={padding} to="/users">users</Link>
+      </div>  
+      <Switch>
+        <Route path="/users">
+            <div><p>usuarios</p></div>
+        </Route>
+        <Route path="/">
+          <div>
+            {sortedBlogs.map(blog =>
+              <Blog key={blog.id} blog={blog} addlike={() => addLike(blog.id)} delblog={() => delBlog(blog.id)} user={user} />
+            )}
+          </div>
+        </Route>
+      </Switch>
+
+    </Router>
   )
 }
 

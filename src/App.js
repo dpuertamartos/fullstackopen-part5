@@ -8,7 +8,7 @@ import blogService from './services/blogs'
 import loginService from './services/login' 
 import { ChangeThenRemoveNotification } from './reducers/notificationReducer'
 import { useSelector, useDispatch } from 'react-redux'
-import { createBlog, initializeBlogs } from './reducers/blogReducer'
+import { addLikeOf, createBlog, initializeBlogs } from './reducers/blogReducer'
 
 
 const App = () => {
@@ -58,19 +58,11 @@ const App = () => {
 
   const addLike = (id) => {
     const blog = blogs.find(b => b.id === id)
-    const changedBlog = {...blog, likes: blog.likes+1}
-    
-    blogService.update(id, changedBlog)
-      .then(returnedBlog => {
-        console.log(JSON.stringify(returnedBlog))
-        console.log(JSON.stringify(changedBlog))
-        // setBlogs(blogs.map(blog => blog.id !== id ? blog : changedBlog))
-      })
-      .catch( () => {
-        dispatch(ChangeThenRemoveNotification(`Blog '${blog.title}' was already removed from server`, 5))
-        // setBlogs(blogs.filter(n => n.id !== id))
-      })
+    console.log(blog)
+    dispatch(addLikeOf(blog))
+    dispatch(ChangeThenRemoveNotification(`Blog '${blog.title}' liked`, 5))
   }
+  
 
   const handleLogout = (event) => {
     event.preventDefault()

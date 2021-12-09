@@ -9,13 +9,14 @@ import loginService from './services/login'
 import { ChangeThenRemoveNotification } from './reducers/notificationReducer'
 import { useSelector, useDispatch } from 'react-redux'
 import { addLikeOf, createBlog, deleteBlog, initializeBlogs } from './reducers/blogReducer'
+import { logUser, setUser } from './reducers/userReducer'
 
 
 const App = () => {
   const blogs = useSelector(state => state.blogs)
   const [username, setUsername] = useState('') 
   const [password, setPassword] = useState('') 
-  const [user, setUser] = useState(null)
+  const user = useSelector(state => state.users)
   const [isError, setIsError] = useState(null)
   const [loginVisible, setLoginVisible] = useState(false)
   const blogFormRef = useRef()
@@ -28,11 +29,10 @@ const App = () => {
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedNoteappUser')
     if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      setUser(user)
-      blogService.setToken(user.token)
+      const usersaved = JSON.parse(loggedUserJSON)
+      dispatch(setUser(usersaved))
     }
-  }, [])
+  }, [dispatch])
 
   const addBlog = (blogObject) => {
     blogFormRef.current.toggleVisibility()
@@ -55,37 +55,21 @@ const App = () => {
     dispatch(ChangeThenRemoveNotification(`Blog '${blog.title}' liked`, 5))
   }
   
-
   const handleLogout = (event) => {
     event.preventDefault()
-    setUser(null)
+    dispatch(setUser(null))
+    window.localStorage.removeItem('loggedNoteappUser')
     setUsername('')
     setPassword('')
     dispatch(ChangeThenRemoveNotification(`Logged out`, 5))
-    window.localStorage.removeItem('loggedNoteappUser')
   }
   
   const handleLogin = async (event) => {
     event.preventDefault()
     console.log('logging in with', username, password)
-
-    try {
-      const user = await loginService.login({
-        username, password,
-      })
-      
-      window.localStorage.setItem(
-        'loggedNoteappUser', JSON.stringify(user)
-      ) 
-      blogService.setToken(user.token)
-      setUser(user)
-      setUsername('')
-      setPassword('')
-    } catch{
-      console.log('Wrong credentials')
-      dispatch(ChangeThenRemoveNotification(`Wrong credentials`, 5))
-      setIsError(true)
-    }
+    dispatch(logUser(username, password))
+    setUsername('')
+    setPassword('')
   }
 
   const loginForm = () => {
@@ -129,10 +113,10 @@ const App = () => {
     <div>
       <h2>blogs</h2>
       <Notification isError={isError} />
-      {user === null ?
+      {user.logged === null ?
       loginForm() :
       <div>
-        <p>{user.name} logged-in <button onClick={handleLogout}>Logout</button></p>
+        <p>{user.logged.name} logged-in <button onClick={handleLogout}>Logout</button></p>
         {blogForm()}
       </div>
       }

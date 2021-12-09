@@ -6,10 +6,12 @@ import App from './App'
 import store1 from './store'
 import blogService from './services/blogs'
 import { initializeBlogs } from './reducers/blogReducer'
+import { initializeUsers } from './reducers/userReducer'
 
-blogService.getAll().then(blogs =>
-    store1.dispatch(initializeBlogs(blogs))
-)
+blogService.getAll().then(() => {
+    store1.dispatch(initializeBlogs())
+    store1.dispatch(initializeUsers())
+})
 
 ReactDOM.render(
   <Provider store={store1}>

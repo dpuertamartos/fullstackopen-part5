@@ -4,10 +4,11 @@ import LoginForm from './components/Loginform'
 import BlogForm from './components/Blogform'
 import Togglable from './components/Togglable'
 import Notification from './components/Notification' 
+import Users from './components/User'
 import { ChangeThenRemoveNotification } from './reducers/notificationReducer'
 import { useSelector, useDispatch } from 'react-redux'
 import { addLikeOf, createBlog, deleteBlog, initializeBlogs } from './reducers/blogReducer'
-import { logUser, setUser } from './reducers/userReducer'
+import { initializeUsers, logUser, setUser } from './reducers/userReducer'
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom"
 
 
@@ -23,6 +24,10 @@ const App = () => {
 
   useEffect(() => {
     dispatch(initializeBlogs())
+  }, [dispatch])
+
+  useEffect(() => {
+    dispatch(initializeUsers())
   }, [dispatch])
 
   useEffect(() => {
@@ -114,7 +119,7 @@ const App = () => {
 
   return (
     <Router>
-      <div className="header">
+      <div className="loginFormulary">
         <h2>blogs</h2>
               <Notification isError={isError} />
               {user.logged === null ?
@@ -131,7 +136,7 @@ const App = () => {
       </div>  
       <Switch>
         <Route path="/users">
-            <div><p>usuarios</p></div>
+            <Users />
         </Route>
         <Route path="/">
           <div>

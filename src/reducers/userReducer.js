@@ -1,5 +1,6 @@
 import loginService from '../services/login'
 import blogService from '../services/blogs'
+import userService from '../services/users'
 import { ChangeThenRemoveNotification } from './notificationReducer'
 
 const userReducer = ( state={logged: null ,total:[]}, action) => {
@@ -43,6 +44,15 @@ export const setUser = (user) => {
     }
 }
 
+export const initializeUsers = () => {
+    return async dispatch => {
+        const users = await userService.getAll()
+        dispatch({ 
+            type: 'INIT_USERS',
+            data: users,
+        })
+    }
+} 
 /* export const initializeUsers = () => {
     return async dispatch => {
         const users = await userService.getAll()

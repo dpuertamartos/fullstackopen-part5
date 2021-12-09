@@ -1,8 +1,8 @@
 import React from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector } from 'react-redux'
 
 const Notification = ({ isError }) => {
-    const message = useSelector(state=>state)
+    const message = useSelector(state=>state.notifications)
     if (message === null) {
       return null
     }

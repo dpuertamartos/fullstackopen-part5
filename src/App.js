@@ -3,37 +3,22 @@ import Blog from './components/Blog'
 import LoginForm from './components/Loginform'
 import BlogForm from './components/Blogform'
 import Togglable from './components/Togglable'
+import Notification from './components/Notification'
 import blogService from './services/blogs'
 import loginService from './services/login' 
+import { ChangeThenRemoveNotification, clearNotification } from './reducers/notificationReducer'
+import { useSelector, useDispatch } from 'react-redux'
 
-
-const Notification = ({ message, isError }) => {
-  if (message === null) {
-    return null
-  }
-  else if (message !== null && isError === null){
-    return (
-      <div className="notification">
-        {message}
-      </div>
-    )
-  }
-  return (
-    <div className="error">
-      {message}
-    </div>
-  )
-}
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('') 
   const [password, setPassword] = useState('') 
   const [user, setUser] = useState(null)
-  const [errorMessage, setErrorMessage] = useState(null)
   const [isError, setIsError] = useState(null)
   const [loginVisible, setLoginVisible] = useState(false)
   const blogFormRef = useRef()
+  const dispatch = useDispatch()
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -56,10 +41,7 @@ const App = () => {
       .create(blogObject)
       .then(returnedBlog => {
         setBlogs(blogs.concat(returnedBlog))
-        setErrorMessage(`a new blog added`)
-        setTimeout(() => {
-          setErrorMessage(null)
-        }, 5000)
+        dispatch(ChangeThenRemoveNotification('a new blog added', 5))
       })
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
@@ -77,12 +59,7 @@ const App = () => {
 
         })
       .catch((error)=>{
-        setErrorMessage(
-          `${error}`
-        )
-        setTimeout(() => {
-          setErrorMessage(null)
-        }, 5000)
+        dispatch(ChangeThenRemoveNotification(`${error}`, 5))
       })
     }
   }
@@ -98,12 +75,7 @@ const App = () => {
         setBlogs(blogs.map(blog => blog.id !== id ? blog : changedBlog))
       })
       .catch( () => {
-        setErrorMessage(
-          `Blog '${blog.title}' was already removed from server`
-        )
-        setTimeout(() => {
-          setErrorMessage(null)
-        }, 5000)
+        dispatch(ChangeThenRemoveNotification(`Blog '${blog.title}' was already removed from server`, 5))
         setBlogs(blogs.filter(n => n.id !== id))
       })
   }
@@ -113,10 +85,7 @@ const App = () => {
     setUser(null)
     setUsername('')
     setPassword('')
-    setErrorMessage("Logged out")
-    setTimeout(() => {
-      setErrorMessage(null)
-    }, 5000)
+    dispatch(ChangeThenRemoveNotification(`Logged out`, 5))
     window.localStorage.removeItem('loggedNoteappUser')
   }
   
@@ -138,20 +107,9 @@ const App = () => {
       setPassword('')
     } catch{
       console.log('Wrong credentials')
-      setErrorMessage('Wrong credentials')
+      dispatch(ChangeThenRemoveNotification(`Wrong credentials`, 5))
       setIsError(true)
-      setTimeout(() => {
-        setErrorMessage(null)
-        setIsError(null)
-      }, 5000)
     }
-    
-    /* catch (exception) {
-      setErrorMessage('Wrong credentials')
-      setTimeout(() => {
-        setErrorMessage(null)
-      }, 5000) 
-    }*/
   }
 
   const loginForm = () => {
@@ -194,7 +152,7 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
-      <Notification message={errorMessage} isError={isError} />
+      <Notification isError={isError} />
       {user === null ?
       loginForm() :
       <div>

@@ -3,7 +3,7 @@ import blogService from '../services/blogs'
 import userService from '../services/users'
 import { ChangeThenRemoveNotification } from './notificationReducer'
 
-const userReducer = ( state={logged: null ,total:[]}, action) => {
+const userReducer = ( state={logged: null ,total: []}, action) => {
     switch(action.type){
         case 'SET_USER_LOGGED':
           return {...state, logged: action.data}

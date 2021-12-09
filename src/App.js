@@ -9,7 +9,7 @@ import { ChangeThenRemoveNotification } from './reducers/notificationReducer'
 import { useSelector, useDispatch } from 'react-redux'
 import { addLikeOf, createBlog, deleteBlog, initializeBlogs } from './reducers/blogReducer'
 import { initializeUsers, logUser, setUser } from './reducers/userReducer'
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom"
+import { BrowserRouter as Router, Switch, Route, Link, useParams } from "react-router-dom"
 
 
 const App = () => {
@@ -117,6 +117,30 @@ const App = () => {
     padding: 5
   }  
 
+  const User = () => {
+    const id3 = useParams().id
+    const selectedUser = user.total.find(user => user.id === id3)
+   
+    if (!selectedUser||!id3) {
+      return null
+    }
+    else{
+      return(
+        <div>
+           <h2>{selectedUser.name}</h2>
+           <h3>added blogs</h3>
+            <ul>
+           {selectedUser.blogs.map(blog=> 
+            <li>{blog.title}</li>
+            )}
+            </ul> 
+        </div>    
+      )
+    }
+  
+ 
+  } 
+
   return (
     <Router>
       <div className="loginFormulary">
@@ -135,6 +159,9 @@ const App = () => {
         <Link style={padding} to="/users">users</Link>
       </div>  
       <Switch>
+        <Route path="/users/:id">
+          <User />
+        </Route>
         <Route path="/users">
             <Users />
         </Route>

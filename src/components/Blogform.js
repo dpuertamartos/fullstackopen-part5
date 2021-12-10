@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { Container, Row, Form, Col, Navbar, Nav, NavDropdown, Table, Button } from 'react-bootstrap'
 
 const BlogForm = ({ createBlog, user }) => {
     const [newTitle, setNewTitle] = useState('') 
@@ -36,33 +37,21 @@ const BlogForm = ({ createBlog, user }) => {
 
     return (
       <div>
-        <form onSubmit={addBlog}>
-            <div>Title:
-                <input
-                    id="title"
-                    value={newTitle}
-                    name="title"
-                    onChange={handleTitleChange}
-                />
-            </div>
-            <div>Author:
-                <input
-                    id="author"
-                    value={newAuthor}
-                    name="author"
-                    onChange={handleAuthorChange}
-                />
-                </div>
-            <div>Url:  
-                <input
-                    id="url"
-                    value={newUrl}
-                    name="url"
-                    onChange={handleUrlChange}
-                />
-            </div>
-            <button type="submit">create</button>
-        </form>  
+        <Form>
+        <Form.Group className="mb-3" controlId="formTitle">
+          <Form.Label>Title: </Form.Label>
+          <Form.Control as="textarea" rows={3} type="title" value={newTitle} onChange={handleTitleChange}/>
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="formAuthor">
+          <Form.Label>Author: </Form.Label>
+          <Form.Control type="author" value={newAuthor} onChange={handleAuthorChange} />
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="formUrl">
+          <Form.Label>Url: </Form.Label>
+          <Form.Control type="url" value={newUrl} onChange={handleUrlChange}/>
+        </Form.Group>
+        <button type="submit" variant="primary" onClick={addBlog}>create</button>
+        </Form>  
       </div>
     )
   }

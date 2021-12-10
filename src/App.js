@@ -11,6 +11,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { addLikeOf, createBlog, deleteBlog, initializeBlogs } from './reducers/blogReducer'
 import { initializeUsers, logUser, setUser } from './reducers/userReducer'
 import { BrowserRouter as Router, Switch, Route, Link, useParams } from "react-router-dom"
+import { Container, Navbar, Nav, NavDropdown, Table, Form, Button } from 'react-bootstrap'
 
 
 const App = () => {
@@ -77,29 +78,6 @@ const App = () => {
     dispatch(logUser(username, password))
     setUsername('')
     setPassword('')
-  }
-
-  const loginForm = () => {
-    const hideWhenVisible = { display: loginVisible ? 'none' : '' }
-    const showWhenVisible = { display: loginVisible ? '' : 'none' }
-
-    return (
-      <span>
-        <span style={hideWhenVisible}>
-          <button onClick={() => setLoginVisible(true)}>log in</button>
-        </span>
-        <div style={showWhenVisible}>
-          <LoginForm
-            username={username}
-            password={password}
-            handleUsernameChange={({ target }) => setUsername(target.value)}
-            handlePasswordChange={({ target }) => setPassword(target.value)}
-            handleSubmit={handleLogin}
-          />
-          <button onClick={() => setLoginVisible(false)}>cancel</button>
-        </div>
-      </span>
-    )
   }
   
   function compare(a,b) {
@@ -177,19 +155,31 @@ const App = () => {
 
   return (
     <Router>
-      <div className="menu">
-        <span><Link style={padding} to="/">blogs</Link></span>
-        <span><Link style={padding} to="/users">users</Link></span>
-        <span>              
-          {user.logged === null 
-            ? loginForm() 
-            :
-              <span>
-                <span>{user.logged.name} logged-in <button onClick={handleLogout}>Logout</button></span>
-                
-              </span>
-          }
-        </span>
+      <div className="navBar">
+        <Navbar bg="light" expand="lg">
+          <Container>
+            <Navbar.Brand href="#home">David React Blog</Navbar.Brand>
+            <Navbar.Toggle aria-controls="basic-navbar-nav" />
+            <Navbar.Collapse id="basic-navbar-nav">
+              <Nav className="me-auto">
+                <Nav.Link href="#home"><Link style={padding} to="/">blogs</Link></Nav.Link>
+                <Nav.Link href="#link"><Link style={padding} to="/users">users</Link></Nav.Link>        
+                {user.logged === null 
+                  ?  <NavDropdown title="Log in" id="basic-nav-dropdown">
+                        <LoginForm
+                          username={username}
+                          password={password}
+                          handleUsernameChange={({ target }) => setUsername(target.value)}
+                          handlePasswordChange={({ target }) => setPassword(target.value)}
+                          handleSubmit={handleLogin}
+                        />
+                     </NavDropdown>
+                  :  <Nav.Link href="#link"><span>{user.logged.name} logged-in <button onClick={handleLogout}>Logout</button></span></Nav.Link> 
+                }
+              </Nav>
+            </Navbar.Collapse>
+          </Container>
+        </Navbar>
       </div>
       <div className="loginFormulary">
         <h2>blogs app</h2>

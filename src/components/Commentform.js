@@ -1,15 +1,18 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { ChangeThenRemoveNotification } from '../reducers/notificationReducer'
+import { addCommentOf } from '../reducers/blogReducer'
 
-const CommentForm = () => {
+const CommentForm = ({blogId}) => {
     const [comment, setNewComment] = useState('')
     const dispatch = useDispatch()
 
     const addComment = (event) => {
         event.preventDefault()
-        console.log("new comment")
+        console.log("new comment", blogId)
+        dispatch(addCommentOf(blogId,{content: comment}))
         dispatch(ChangeThenRemoveNotification("new comment", 5))
+        setNewComment("")
       }
     
     const handleCommentChange = (event) => {

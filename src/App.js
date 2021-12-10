@@ -161,7 +161,7 @@ const App = () => {
            <div>added by {selectedBlog.author.username}</div>
            <div>wrote by {selectedBlog.writer}</div>
            <h3>comments</h3>
-           <CommentForm /> 
+           <CommentForm blogId={id4}/> 
            <div>
               <ul>
                 {selectedBlog.comment.map(comment => 

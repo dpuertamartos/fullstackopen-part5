@@ -81,10 +81,10 @@ const App = () => {
     const showWhenVisible = { display: loginVisible ? '' : 'none' }
 
     return (
-      <div>
-        <div style={hideWhenVisible}>
+      <span>
+        <span style={hideWhenVisible}>
           <button onClick={() => setLoginVisible(true)}>log in</button>
-        </div>
+        </span>
         <div style={showWhenVisible}>
           <LoginForm
             username={username}
@@ -95,7 +95,7 @@ const App = () => {
           />
           <button onClick={() => setLoginVisible(false)}>cancel</button>
         </div>
-      </div>
+      </span>
     )
   }
   
@@ -131,39 +131,68 @@ const App = () => {
            <h3>added blogs</h3>
             <ul>
            {selectedUser.blogs.map(blog=> 
-            <li>{blog.title}</li>
+            <li key={blog.id}>{blog.title}</li>
             )}
             </ul> 
         </div>    
       )
     }
-  
- 
   } 
+
+  const BlogIndividual = () => {
+    const id4 = useParams().idblog
+    console.log(id4)
+    const selectedBlog = blogs.find(blog => blog.id === id4)
+    console.log(id4)
+    console.log(selectedBlog)
+   
+    if (!selectedBlog||!id4) {
+      return null
+    }
+    else{
+      return(
+        <div>
+           <h2>{selectedBlog.title}</h2>
+           <div><a href={selectedBlog.url}>{selectedBlog.url}</a></div>
+           <div>{selectedBlog.likes} likes <button onClick={() => addLike(selectedBlog.id)}>Like</button></div>
+           <div>added by {selectedBlog.author.username}</div>
+           <div>wrote by {selectedBlog.writer}</div>
+        </div>    
+      )
+    }
+  } 
+
 
   return (
     <Router>
-      <div className="loginFormulary">
-        <h2>blogs</h2>
-              <Notification isError={isError} />
-              {user.logged === null ?
-              loginForm() :
-              <div>
-                <p>{user.logged.name} logged-in <button onClick={handleLogout}>Logout</button></p>
-                {blogForm()}
-              </div>
-              }
-      </div>
       <div className="menu">
-        <Link style={padding} to="/">home</Link>
-        <Link style={padding} to="/users">users</Link>
-      </div>  
+        <span><Link style={padding} to="/">blogs</Link></span>
+        <span><Link style={padding} to="/users">users</Link></span>
+        <span>              
+          {user.logged === null 
+            ? loginForm() 
+            :
+              <span>
+                <span>{user.logged.name} logged-in <button onClick={handleLogout}>Logout</button></span>
+                
+              </span>
+          }
+        </span>
+      </div>
+      <div className="loginFormulary">
+        <h2>blogs app</h2>
+              <Notification isError={isError} />
+        <div>{blogForm()}</div>  
+      </div>
       <Switch>
         <Route path="/users/:id">
           <User />
         </Route>
         <Route path="/users">
             <Users />
+        </Route>
+        <Route path="/:idblog">
+          <BlogIndividual />
         </Route>
         <Route path="/">
           <div>

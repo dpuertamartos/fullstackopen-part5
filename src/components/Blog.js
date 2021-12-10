@@ -1,4 +1,5 @@
 import React, {useState} from 'react'
+import { BrowserRouter as Router, Switch, Route, Link, useParams } from "react-router-dom"
 
 const Blog = (props) => {
   const blogStyle = {
@@ -24,7 +25,8 @@ const Blog = (props) => {
     <div style={blogStyle} className='blog'>
       
         <div style={hideWhenVisible} className="showAlways">
-          <span id={props.blog.title}>{props.blog.title} <button onClick={toggleVisibility}>view</button></span>
+          <Link to={`/${props.blog.id}`}>{props.blog.title}</Link>
+          <span id={props.blog.title}><button onClick={toggleVisibility}>view</button></span>
         </div> 
         <div style={showWhenVisible} className="showClick">
           {props.blog.title} <button onClick={toggleVisibility}>hide</button>

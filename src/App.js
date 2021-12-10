@@ -5,6 +5,7 @@ import BlogForm from './components/Blogform'
 import Togglable from './components/Togglable'
 import Notification from './components/Notification' 
 import Users from './components/User'
+import CommentForm from './components/Commentform'
 import { ChangeThenRemoveNotification } from './reducers/notificationReducer'
 import { useSelector, useDispatch } from 'react-redux'
 import { addLikeOf, createBlog, deleteBlog, initializeBlogs } from './reducers/blogReducer'
@@ -58,7 +59,9 @@ const App = () => {
     dispatch(addLikeOf(blog))
     dispatch(ChangeThenRemoveNotification(`Blog '${blog.title}' liked`, 5))
   }
-  
+
+ 
+
   const handleLogout = (event) => {
     event.preventDefault()
     dispatch(setUser(null))
@@ -158,6 +161,7 @@ const App = () => {
            <div>added by {selectedBlog.author.username}</div>
            <div>wrote by {selectedBlog.writer}</div>
            <h3>comments</h3>
+           <CommentForm /> 
            <div>
               <ul>
                 {selectedBlog.comment.map(comment => 

@@ -157,6 +157,14 @@ const App = () => {
            <div>{selectedBlog.likes} likes <button onClick={() => addLike(selectedBlog.id)}>Like</button></div>
            <div>added by {selectedBlog.author.username}</div>
            <div>wrote by {selectedBlog.writer}</div>
+           <h3>comments</h3>
+           <div>
+              <ul>
+                {selectedBlog.comment.map(comment => 
+                  <li key={comment.content}>{comment.content}</li>
+                )}
+              </ul> 
+           </div>
         </div>    
       )
     }

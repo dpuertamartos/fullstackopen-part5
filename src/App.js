@@ -209,7 +209,7 @@ const App = () => {
         <Route path="/">
           <div>
             {sortedBlogs.map(blog =>
-              <Blog key={blog.id} blog={blog} addlike={() => addLike(blog.id)} delblog={() => delBlog(blog.id)} user={user} />
+              <Blog key={blog.id} blog={blog} addlike={() => addLike(blog.id)} delblog={() => delBlog(blog.id)} user={user.logged} />
             )}
           </div>
         </Route>
